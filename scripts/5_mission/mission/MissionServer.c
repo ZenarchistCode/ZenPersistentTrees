@@ -38,7 +38,7 @@ modded class MissionServer
 		// Get all objects within 10cm of the vector location
 		array<Object> objectsNearTree = new array<Object>;
 		GetGame().GetObjectsAtPosition(treeConfig.Location, 0.01, objectsNearTree, null);
-		EntityAI obj;
+		Object obj;
 
 		// Cut down any trees/bushes within 0.01m of location
 		for (int x = 0; x < objectsNearTree.Count(); x++)
