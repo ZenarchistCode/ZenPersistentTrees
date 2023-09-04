@@ -1,12 +1,5 @@
 modded class MissionServer
 {
-	// Called when the server shuts down - seems to work fine for our purposes.
-	void ~MissionServer()
-	{
-		// Only save tree config on server shutdown to avoid potential lag if the file gets large
-		GetZenTreesConfig().Save();
-	}
-
 	// Called when server initializes
 	override void OnInit()
 	{
@@ -22,6 +15,15 @@ modded class MissionServer
 		// Deforest the lands 10 seconds after server init to give the game time to load all objects etc
 		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(Deforestation, 10000, false);
 	}
+
+	// Called when the server shuts down.
+	override void OnMissionFinish()
+	{
+		super.OnMissionFinish();
+
+		// Only save tree config on server shutdown to avoid potential lag if the file gets large.
+		GetZenTreesConfig().Save();
+	};
 
 	// Restore saved "health" of trees and cut down any that have 0 health
 	private void Deforestation()
