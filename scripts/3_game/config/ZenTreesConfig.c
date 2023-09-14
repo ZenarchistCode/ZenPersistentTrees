@@ -80,33 +80,21 @@ class ZenTreesConfig
 	// Clears any "respawned" trees (ie. trees that have exceeded their timestamp)
 	void ClearRespawnedTrees()
 	{
-		autoptr array<ZenTreeState> tempTreeArray = new array<ZenTreeState>;
+		//autoptr array<ZenTreeState> tempTreeArray = new array<ZenTreeState>;
 		int timestamp = JMDate.Now(false).GetTimestamp();
-		int i;
 		ZenTreeState treeState;
 
-		// Loop through saved tree list
-		for (i = 0; i < CutTrees.Count(); i++)
+		for (int i = CutTrees.Count() - 1; i >= 0; i--)
 		{
 			treeState = CutTrees.Get(i);
 
-			// Check if today's timestamp is less than future renew timestamp
-			if (timestamp < treeState.RenewTime)
-				tempTreeArray.Insert(treeState);
-		}
-
-		// Clear old array and re-populate with any non-removed items
-		CutTrees.Clear();
-		for (i = 0; i < tempTreeArray.Count(); i++)
-		{
-			CutTrees.Insert(tempTreeArray.Get(i));
+			// Check if today's timestamp is greater than future renew timestamp, if so then respawn tree by removing it
+			if (timestamp > treeState.RenewTime)
+				CutTrees.Remove(i);
 		}
 
 		// Save any changes to config file
 		Save();
-
-		// Clear temp array
-		tempTreeArray.Clear();
 	}
 }
 

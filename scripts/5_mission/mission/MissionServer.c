@@ -1,6 +1,5 @@
 modded class MissionServer
 {
-	// Called when server initializes
 	override void OnInit()
 	{
 		super.OnInit();
@@ -11,12 +10,16 @@ modded class MissionServer
 
 		// Clear any respawned trees
 		GetZenTreesConfig().ClearRespawnedTrees();
-
-		// Deforest the lands 10 seconds after server init to give the game time to load all objects etc
-		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(Deforestation, 10000, false);
 	}
 
-	// Called when the server shuts down.
+	override void OnMissionStart()
+	{
+		super.OnMissionStart();
+
+		// Deforest the lands after server start to give the game time to load all objects etc
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(Deforestation, 2500, false);
+	};
+
 	override void OnMissionFinish()
 	{
 		super.OnMissionFinish();
